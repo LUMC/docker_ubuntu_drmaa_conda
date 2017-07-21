@@ -4,7 +4,9 @@ export USER=$(whoami)
 export SGE_CONFIG_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export SGE_ROOT=/var/lib/gridengine
 echo $SGE_CONFIG_DIR
-sed -i -r "s/^(127.0.0.1\s)(localhost\.localdomain\slocalhost)/\1localhost localhost.localdomain ${HOSTNAME} /" /etc/hosts
+cp /etc/hosts ~/.etc.hosts
+sed -i -r "s/^(127.0.0.1\s)(localhost\.localdomain\slocalhost)/\1localhost localhost.localdomain ${HOSTNAME} /" ~/.etc.hosts
+cp -f ~/.etc.hosts /etc/hosts
 cp /etc/resolv.conf /etc/resolv.conf.orig
 echo "domain ${HOSTNAME}" >> /etc/resolv.conf
 # Update everything.
@@ -14,7 +16,7 @@ echo "gridengine-master shared/gridenginecell string default" | debconf-set-sele
 echo "gridengine-master shared/gridengineconfig boolean true" | debconf-set-selections
 apt-get -y install gridengine-common gridengine-master
 # Do this in a separate step to give master time to start
-apt-get -y install libdrmaa1.0 gridengine-client gridengine-exec
+apt-get -y install gridengine-drmaa1.0 gridengine-client gridengine-exec
 cp ${SGE_ROOT}/default/common/act_qmaster ${SGE_ROOT}/default/common/act_qmaster.orig
 echo $HOSTNAME > ${SGE_ROOT}/default/common/act_qmaster
 service gridengine-master restart
