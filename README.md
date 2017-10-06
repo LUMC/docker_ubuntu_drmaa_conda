@@ -3,22 +3,48 @@
 
 # Purpose
 
-In order to provide a simple portable test environment for Grid Engine, this repo contains what is necessary to build a Ubuntu 12 based image using Docker. In addition, it provides a copy of [`anaconda-client`]( http://docs.anaconda.org/ ) and [`conda`]( http://conda.pydata.org/ ) with some extensions for building.
+In order to provide a simple portable test environment for Grid Engine (DRMAA API enabled),
+this repo contains what is necessary to build a Ubuntu 16.04 based image using Docker.
+
+# History
+This was forked from https://github.com/jakirkham/docker_ubuntu_drmaa_conda. Thanks to jakirkham for developing this image.
+This repository was forked in order to have a testing environment for a gridengine cluster without conda. 
+Bow added the [changes needed](https://github.com/bow/docker_ubuntu_drmaa_conda/tree/update/xenial-no-conda) 
+to run on Ubuntu 16.04. 
 
 # Building
 
 ## Automatic
 
-This repo is part of an automated build, which is hosted on Docker Hub ( <https://hub.docker.com/r/jakirkham/ubuntu_drmaa_conda> ). Changes added to this trigger an automatic rebuild and deploy the resulting image to Docker Hub. To download an existing image, one simply needs to run `docker pull jakirkham/ubuntu_drmaa_conda`.
+This repo is part of an automated build, which is hosted on Docker Hub 
+( <https://hub.docker.com/r/lumc/ubuntu-gridengine-drmaa/> ). 
+Changes added to this trigger an automatic rebuild and deploy the resulting image to Docker Hub. 
+To download an existing image, one simply needs to run 
+`https://hub.docker.com/r/lumc/ubuntu-gridengine-drmaa/`.
 
 ## Manual
 
-If one wishes to develop this repo, building will need to be performed manually. This container can be built simply by `cd`ing into the repo and using `docker build --rm -t <NAME> .` where `<NAME>` is the name tagged to the image built. More information about building can be found in Docker's documentation ( <https://docs.docker.com/reference/builder> ). Please consider opening a pull request for changes that you make.
+If one wishes to develop this repo, building will need to be performed manually. 
+This container can be built simply by `cd`ing into the repo and using 
+`docker build --rm -t <NAME> .` where `<NAME>` is the name tagged to the image built. 
+More information about building can be found in Docker's documentation 
+( <https://docs.docker.com/reference/builder> ). 
+Please consider opening a pull request for changes that you make.
 
 # Testing
 
-A simple test has been added during the installation of Grid Engine as this is the trickiest step and the one most likely to go wrong. The test submits a simple job and verifies that it runs successfully. As this occurs during the build process, failure of this test will terminate the build. Currently, Docker Hub does not provide a way to test the entrypoint to make sure it behaves properly. Ideally commonalities between the entrypoint and Grid Engine installation can be found and refactored out into a common script that both can use allowing it to be better tested. No direct testing of `conda` is performed. However, some basic installation and upgrading occurs, which should hopefully verify that it is working. Also, as this is pretty well tested by the team at Continuum, it is believed not to be at as serious of a risk.
+A simple test has been added during the installation of Grid Engine as this is the 
+trickiest step and the one most likely to go wrong. The test submits a simple job 
+and verifies that it runs successfully. As this occurs during the build process, 
+failure of this test will terminate the build. Currently, Docker Hub does not provide 
+a way to test the entrypoint to make sure it behaves properly. Ideally commonalities 
+between the entrypoint and Grid Engine installation can be found and refactored out 
+into a common script that both can use allowing it to be better tested. 
 
 # Usage
 
-Once an image is acquired either from one of the provided builds or manually, the image is designed to provide a preconfigured shell environment. Simply run `docker run --rm -it <NAME>`. This will configure Grid Engine and a number of environment variables useful for maintaining it and starts up `bash`. In the case of an automated build, `<NAME>` is `jakirkham/ubuntu_drmaa_conda`.
+Once an image is acquired either from one of the provided builds or manually, 
+the image is designed to provide a preconfigured shell environment. 
+Simply run `docker run --rm -it <NAME>`. This will configure Grid Engine and a 
+number of environment variables useful for maintaining it and starts up `bash`. 
+In the case of an automated build, `<NAME>` is `lumc/ubuntu-gridengine-drmaa`.
